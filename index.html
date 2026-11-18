@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Agri Lanka Trust</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Agri Lanka Trust: a validation-first platform that scores Sri Lankan agri-SMEs from real documents so investors can fund businesses they can verify.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+Sinhala:wght@500;700&family=Noto+Sans+Tamil:wght@500;700&display=swap">
+<style>
+/* Layout concept: an "evidence file" — photo-led sections, a readiness certificate as the hero object,
+   status chips (Verified / In review / Needs fix) and mono figures for every number we can source. */
+:root{
+  --paper:#F5F8F2; --card:#FFFFFF; --ink:#14241A; --mute:#55695B; --line:#D7E3D3;
+  --paddy:#0E6B36; --leaf:#1FAA59; --gold:#F5B400; --teal:#0A9396; --clay:#C2410C;
+  --wash:#E7F2E5; --goldwash:#FFF4CC; --claywash:#FDE7DC; --shadow:0 18px 40px rgba(14,60,30,.12);
+  --hero-ink:#FFFFFF; --hero-shade:rgba(8,32,18,.62);
+  --f-display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --f-body:"Inter","Segoe UI",system-ui,-apple-system,sans-serif;
+  --f-mono:"IBM Plex Mono",Consolas,"Courier New",monospace;
+  --f-si:"Noto Sans Sinhala","Iskoola Pota","Nirmala UI",sans-serif;
+  --f-ta:"Noto Sans Tamil","Latha","Nirmala UI",sans-serif;
+  --r:14px; --max:1180px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0D1812; --card:#14231A; --ink:#E5F1E7; --mute:#9DB5A3; --line:#26402F;
+    --paddy:#5BD18C; --leaf:#3CC274; --gold:#FFC83D; --teal:#3CC6C9; --clay:#FF8A5B;
+    --wash:#16301F; --goldwash:#3A3112; --claywash:#3B2116; --shadow:0 18px 40px rgba(0,0,0,.45);
+    --hero-shade:rgba(4,14,8,.70); color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0D1812; --card:#14231A; --ink:#E5F1E7; --mute:#9DB5A3; --line:#26402F;
+  --paddy:#5BD18C; --leaf:#3CC274; --gold:#FFC83D; --teal:#3CC6C9; --clay:#FF8A5B;
+  --wash:#16301F; --goldwash:#3A3112; --claywash:#3B2116; --shadow:0 18px 40px rgba(0,0,0,.45);
+  --hero-shade:rgba(4,14,8,.70); color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:calc(72px + env(safe-area-inset-top,0px))}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.6 var(--f-body);-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--paddy)}
+img{max-width:100%;display:block}
+a{color:inherit}
+h1,h2,h3{font-family:var(--f-display);line-height:1.08;margin:0;text-wrap:balance;letter-spacing:-.01em}
+h2{font-size:clamp(28px,4vw,44px);font-weight:800}
+h3{font-size:20px;font-weight:700}
+p{margin:0}
+.wrap{max-width:var(--max);margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.eyebrow{font:600 12px/1.2 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--paddy)}
+.lead{font-size:clamp(17px,1.6vw,19px);color:var(--mute);max-width:62ch}
+.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.btn{display:inline-flex;align-items:center;gap:8px;border:0;border-radius:999px;padding:12px 20px;font:600 15px/1 var(--f-body);text-decoration:none;cursor:pointer;transition:transform .15s ease,box-shadow .15s ease}
+.btn:hover{transform:translateY(-1px)}
+.btn:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.btn-gold{background:var(--gold);color:#2B2100;box-shadow:0 8px 20px rgba(245,180,0,.35)}
+.btn-ghost{background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.45)}
+.btn-ink{background:var(--paddy);color:var(--paper)}
+.chip{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:3px 10px;font:600 12px/1.4 var(--f-mono);white-space:nowrap}
+.chip.ok{background:var(--wash);color:var(--paddy)}
+.chip.wait{background:var(--goldwash);color:#8A6400}
+.chip.bad{background:var(--claywash);color:var(--clay)}
+:root[data-theme="dark"] .chip.wait{color:var(--gold)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .chip.wait{color:var(--gold)}}
+
+/* header */
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:var(--paddy);color:#fff}
+:root[data-theme="dark"] header{background:#0B3A1F}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) header{background:#0B3A1F}}
+.bar{display:flex;align-items:center;gap:14px;min-height:64px}
+.logo{display:flex;align-items:center;gap:10px;font:800 18px/1 var(--f-display);text-decoration:none;color:#fff;white-space:nowrap}
+.logo svg{flex:none}
+.nav{display:flex;gap:2px;margin-left:auto;overflow-x:auto;scrollbar-width:none}
+.nav::-webkit-scrollbar{display:none}
+.nav a{font:500 14px/1 var(--f-body);text-decoration:none;color:#EAF7EE;padding:9px 11px;border-radius:999px;white-space:nowrap}
+.nav a:hover{background:rgba(255,255,255,.14)}
+.bar .btn{padding:10px 16px;font-size:14px}
+@media (max-width:980px){.nav{display:none}.bar .btn-ghost{margin-left:auto}}
+@media (max-width:440px){.bar .btn-ghost{display:none}.bar .btn-gold{margin-left:auto}}
+
+/* hero */
+.hero{position:relative;color:var(--hero-ink);background:#163E25 url("img/hero_paddy.jpg") center 60%/cover no-repeat}
+.hero::before{content:"";position:absolute;inset:0;background:linear-gradient(100deg,var(--hero-shade) 0%,rgba(8,32,18,.45) 48%,rgba(8,32,18,.10) 100%)}
+.hero .wrap{position:relative;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:40px;align-items:center;padding-block:72px 84px}
+.hero h1{font-size:clamp(44px,7vw,88px);font-weight:800;letter-spacing:-.02em}
+.hero h1 span{color:var(--gold)}
+.tri{display:flex;flex-wrap:wrap;gap:6px 18px;margin:16px 0 18px;font-size:17px;opacity:.95}
+.tri .si{font-family:var(--f-si)} .tri .ta{font-family:var(--f-ta)}
+.hero .lead{color:#E7F3EA}
+.hero .eyebrow{color:var(--gold)}
+.cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}
+.cert{background:var(--card);color:var(--ink);border-radius:20px;box-shadow:0 30px 60px rgba(0,0,0,.35);padding:22px;max-width:420px;justify-self:end;width:100%}
+.cert-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;border-bottom:1px dashed var(--line);padding-bottom:14px}
+.cert-top b{font:700 18px/1.2 var(--f-display);display:block}
+.cert-top small{color:var(--mute);font-size:13px}
+.ring{--v:82;width:96px;height:96px;flex:none;border-radius:50%;display:grid;place-items:center;
+  background:conic-gradient(var(--gold) calc(var(--v)*1%),var(--line) 0);position:relative}
+.ring::before{content:"";position:absolute;inset:10px;border-radius:50%;background:var(--card)}
+.ring span{position:relative;font:700 28px/1 var(--f-mono)}
+.ring span small{font-size:11px;color:var(--mute);display:block;text-align:center;font-weight:600}
+.docs{list-style:none;margin:14px 0 0;padding:0;display:grid;gap:9px}
+.docs li{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:14px}
+.gate{margin-top:14px;padding:10px 12px;border-radius:12px;background:var(--wash);color:var(--paddy);font:600 13px/1.4 var(--f-body)}
+@media (max-width:860px){.hero .wrap{grid-template-columns:1fr;padding-block:52px 60px}.cert{justify-self:start}}
+
+/* proof strip */
+.proof{background:var(--card);border-bottom:1px solid var(--line)}
+.proof .wrap{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0}
+.proof div.cell{padding:24px 18px;border-left:1px solid var(--line)}
+.proof div.cell:first-child{border-left:0}
+.proof b{display:block;font:700 clamp(26px,3vw,36px)/1 var(--f-mono);color:var(--paddy)}
+.proof p{font-size:14px;color:var(--mute);margin-top:8px}
+.proof cite{display:block;font:500 11px/1.3 var(--f-mono);color:var(--mute);opacity:.8;margin-top:6px;font-style:normal}
+@media (max-width:820px){.proof .wrap{grid-template-columns:repeat(2,minmax(0,1fr))}.proof div.cell:nth-child(3){border-left:0}.proof div.cell{border-top:1px solid var(--line)}}
+
+section{padding-block:84px}
+.head{display:grid;gap:12px;margin-bottom:36px;max-width:780px}
+.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:48px;align-items:center}
+@media (max-width:860px){.split{grid-template-columns:1fr;gap:28px}section{padding-block:60px}}
+.photo{border-radius:20px;overflow:hidden;position:relative;box-shadow:var(--shadow)}
+.photo img{width:100%;height:100%;object-fit:cover;aspect-ratio:4/3}
+.photo figcaption{position:absolute;left:12px;bottom:12px;background:rgba(10,30,18,.72);color:#fff;font:500 12px/1.3 var(--f-mono);padding:6px 10px;border-radius:8px}
+
+/* problem */
+.pains{display:grid;gap:16px;margin-top:22px}
+.pain{display:grid;grid-template-columns:44px minmax(0,1fr);gap:14px;align-items:start}
+.pain i{font:700 15px/44px var(--f-mono);width:44px;height:44px;border-radius:12px;text-align:center;background:var(--goldwash);color:#7A5900;font-style:normal}
+:root[data-theme="dark"] .pain i{color:var(--gold)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .pain i{color:var(--gold)}}
+.pain b{font-family:var(--f-display);font-size:19px}
+.pain p{color:var(--mute)}
+blockquote{margin:26px 0 0;padding:16px 20px;border-left:4px solid var(--gold);background:var(--card);border-radius:0 12px 12px 0;font:600 18px/1.45 var(--f-display)}
+blockquote cite{display:block;font:500 12px/1.4 var(--f-mono);color:var(--mute);margin-top:6px;font-style:normal}
+
+/* flip */
+.flip{background:var(--card);border-block:1px solid var(--line)}
+.lanes{display:grid;gap:18px}
+.lane{display:grid;grid-template-columns:150px repeat(4,minmax(0,1fr));gap:10px;align-items:stretch}
+.lane>span{font:700 13px/1.3 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;display:flex;align-items:center;color:var(--mute)}
+.lane div{border-radius:12px;padding:14px;font-weight:600;font-size:15px;border:1px solid var(--line);background:var(--paper)}
+.lane.us>span{color:var(--paddy)}
+.lane.us div{background:var(--wash);border-color:transparent}
+.lane.us div:last-child{background:var(--paddy);color:var(--paper)}
+.lane.old div:last-child{background:var(--claywash);color:var(--clay);border-color:transparent}
+@media (max-width:760px){.lane{grid-template-columns:1fr 1fr}.lane>span{grid-column:1/-1}}
+.tagline{margin-top:26px;font:800 clamp(24px,3vw,34px)/1.1 var(--f-display);color:var(--paddy)}
+
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;counter-reset:s}
+.step{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px;counter-increment:s;display:grid;gap:8px;align-content:start}
+.step::before{content:counter(s,decimal-leading-zero);font:600 13px/1 var(--f-mono);color:var(--paddy);letter-spacing:.08em}
+.step p{color:var(--mute);font-size:15px}
+@media (max-width:860px){.steps{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.steps{grid-template-columns:1fr}}
+
+/* score lab */
+.lab{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:28px;align-items:start}
+@media (max-width:900px){.lab{grid-template-columns:1fr}}
+.dims{display:grid;gap:12px}
+.dim{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;display:grid;gap:6px}
+.dim-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.dim-top b{font-family:var(--f-display);font-size:17px}
+.dim-top output{font:700 18px/1 var(--f-mono)}
+.dim small{color:var(--mute);font-size:13px}
+.dim input{width:100%;accent-color:var(--paddy)}
+.dim.crit .dim-top b::after{content:"critical";margin-left:8px;font:600 10px/1 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--clay);vertical-align:middle}
+.verdict{position:sticky;top:calc(84px + env(safe-area-inset-top,0px));background:var(--card);border:1px solid var(--line);border-radius:20px;padding:22px;box-shadow:var(--shadow);display:grid;gap:14px}
+.verdict .ring{width:120px;height:120px}
+.verdict .ring span{font-size:34px}
+.v-row{display:flex;gap:18px;align-items:center}
+.status{font:700 20px/1.2 var(--f-display)}
+.status.ok{color:var(--paddy)} .status.no{color:var(--clay)}
+.rules{list-style:none;margin:0;padding:0;display:grid;gap:6px;font-size:14px}
+.rules li{display:flex;gap:8px;align-items:center}
+.rules li::before{content:"";flex:none;width:16px;height:16px;background:var(--paddy);-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z'/%3E%3C/svg%3E") center/contain no-repeat}
+.rules li.fail::before{background:var(--clay);-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z'/%3E%3C/svg%3E")}
+.rules li.fail{color:var(--clay)}
+.reset{justify-self:start;background:none;border:1px solid var(--line);color:var(--ink);padding:8px 14px}
+
+/* sectors */
+.sectors{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.sector{position:relative;border-radius:var(--r);overflow:hidden;min-height:240px;background:#1B3A26;box-shadow:var(--shadow)}
+.sector img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.sector::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 35%,rgba(5,20,10,.82) 100%)}
+.sector div{position:absolute;left:16px;right:16px;bottom:14px;z-index:1;color:#fff}
+.sector b{font:800 22px/1.1 var(--f-display);display:block}
+.sector small{font-size:13px;color:#DCEFE1}
+@media (max-width:860px){.sectors{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.sectors{grid-template-columns:1fr}}
+
+/* audiences */
+.ticks{list-style:none;margin:20px 0 0;padding:0;display:grid;gap:12px}
+.ticks li{display:grid;grid-template-columns:26px minmax(0,1fr);gap:10px}
+.ticks li::before{content:"";width:22px;height:22px;border-radius:7px;background:var(--wash) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 12.5l4.2 4.2L19 7' fill='none' stroke='%231FAA59' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/16px no-repeat;margin-top:2px}
+.checklist{margin-top:22px;background:var(--card);border:1px dashed var(--line);border-radius:var(--r);padding:16px 18px}
+.checklist b{font:600 12px/1 var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--mute)}
+.checklist ul{margin:10px 0 0;padding-left:18px;columns:2;column-gap:24px;font-size:14px}
+@media (max-width:520px){.checklist ul{columns:1}}
+.investors{background:var(--card);border-block:1px solid var(--line)}
+
+/* pricing */
+.plans{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.plan{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:22px;display:grid;gap:10px;align-content:start}
+.plan .who{font:600 11px/1 var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--mute)}
+.plan .price{font:700 32px/1 var(--f-mono);color:var(--ink)}
+.plan .price small{font:500 13px var(--f-body);color:var(--mute)}
+.plan ul{margin:0;padding-left:18px;color:var(--mute);font-size:14px;display:grid;gap:4px}
+.plan.hot{border:2px solid var(--gold)}
+@media (max-width:960px){.plans{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.plans{grid-template-columns:1fr}}
+.fee{margin-top:18px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) minmax(0,1.4fr);gap:12px;align-items:stretch}
+.fee div{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px}
+.fee b{font:700 28px/1 var(--f-mono);display:block}
+.fee small{color:var(--mute);font-size:13px}
+.fee .note{background:var(--wash);border-color:transparent;font-size:14px}
+@media (max-width:860px){.fee{grid-template-columns:1fr 1fr 1fr}.fee .note{grid-column:1/-1}}
+
+/* why now */
+.why{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.why div{background:var(--card);border-top:4px solid var(--teal);border-radius:0 0 var(--r) var(--r);padding:18px;display:grid;gap:8px;align-content:start}
+.why b{font:700 22px/1.1 var(--f-mono);color:var(--teal)}
+.why p{font-size:14px;color:var(--mute)}
+.why cite{font:500 11px/1.3 var(--f-mono);color:var(--mute);font-style:normal}
+@media (max-width:960px){.why{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.why{grid-template-columns:1fr}}
+
+/* roadmap */
+.road{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:0;position:relative}
+.road::before{content:"";position:absolute;left:0;right:0;top:15px;height:3px;background:linear-gradient(90deg,var(--leaf),var(--gold))}
+.road div{position:relative;padding:40px 14px 0 0}
+.road div::before{content:"";position:absolute;top:6px;left:0;width:21px;height:21px;border-radius:50%;background:var(--paper);border:4px solid var(--paddy)}
+.road b{font:600 12px/1 var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--paddy)}
+.road p{font-size:15px;margin-top:8px}
+@media (max-width:860px){.road{grid-template-columns:1fr;gap:18px}.road::before{left:9px;right:auto;width:3px;top:0;bottom:0;height:auto;background:linear-gradient(180deg,var(--leaf),var(--gold))}.road div{padding:0 0 0 40px}.road div::before{top:0}}
+
+/* team */
+.team{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.member{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px;display:grid;gap:10px;align-content:start}
+.avatar{width:64px;height:64px;border-radius:18px;display:grid;place-items:center;font:800 22px/1 var(--f-display);color:#fff;background:var(--paddy)}
+.member:nth-child(2) .avatar{background:var(--teal)} .member:nth-child(3) .avatar{background:#B7791F} .member:nth-child(4) .avatar{background:#7A4CC2}
+.member .role{font:600 12px/1 var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--paddy)}
+.member p{font-size:14px;color:var(--mute)}
+@media (max-width:960px){.team{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.team{grid-template-columns:1fr}}
+
+/* faq */
+.faq{display:grid;gap:10px;max-width:860px}
+details{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:0 18px}
+summary{cursor:pointer;list-style:none;padding:16px 0;font:700 17px/1.35 var(--f-display);display:flex;justify-content:space-between;gap:12px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";font:600 22px/1 var(--f-mono);color:var(--paddy)}
+details[open] summary::after{content:"–"}
+details p{padding:0 0 16px;color:var(--mute)}
+
+/* join */
+.join{background:var(--paddy);color:#fff}
+:root[data-theme="dark"] .join{background:#0B3A1F}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .join{background:#0B3A1F}}
+.join .eyebrow{color:var(--gold)}
+.join .lead{color:#DCEFE1}
+form{background:var(--card);color:var(--ink);border-radius:20px;padding:22px;display:grid;gap:12px;box-shadow:0 30px 60px rgba(0,0,0,.25)}
+form .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:520px){form .row{grid-template-columns:1fr}}
+label{display:grid;gap:6px;font:600 13px/1.2 var(--f-body)}
+input,select{font:15px var(--f-body);padding:11px 12px;border-radius:10px;border:1px solid var(--line);background:var(--paper);color:var(--ink);width:100%}
+.seg{display:flex;gap:8px;flex-wrap:wrap}
+.seg label{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:999px;padding:9px 14px;cursor:pointer;font-weight:600}
+.seg input{width:auto;accent-color:var(--paddy)}
+.thanks{background:var(--wash);color:var(--paddy);border-radius:12px;padding:12px 14px;font-weight:600}
+.contact{display:grid;gap:10px;margin-top:22px;font-size:15px}
+.contact span{font:600 12px/1 var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:4px}
+.contact b{user-select:all}
+
+footer{background:var(--card);border-top:1px solid var(--line);padding-block:34px;font-size:13px;color:var(--mute)}
+footer .wrap{display:grid;gap:14px}
+footer details{background:transparent;border-color:var(--line)}
+footer summary{font-size:14px}
+footer ol{margin:0 0 14px;padding-left:18px;display:grid;gap:4px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap bar">
+    <a class="logo" href="#top" aria-label="Agri Lanka Trust home">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="10" fill="#F5B400"/><path d="M9 24c0-8 6-14 16-15-1 10-7 16-15 16" fill="#0E6B36"/><path d="M10 25c4-5 7-8 12-11" stroke="#F5F8F2" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+      Agri Lanka Trust
+    </a>
+    <nav class="nav" aria-label="Sections">
+      <a href="#problem">Problem</a><a href="#how">How it works</a><a href="#score">The score</a><a href="#smes">For SMEs</a>
+      <a href="#investors">For investors</a><a href="#pricing">Pricing</a><a href="#team">Team</a><a href="#faq">FAQ</a>
+    </nav>
+    <a class="btn btn-ghost" href="demo/index.html">Live demo</a>
+    <a class="btn btn-gold" href="#join">Get validated</a>
+  </div>
+</header>
+
+<main id="top">
+<section class="hero" style="padding-block:0">
+  <div class="wrap">
+    <div>
+      <p class="eyebrow">Validation-first agri-investment platform · Sri Lanka</p>
+      <h1>Trust first.<br><span>Capital second.</span></h1>
+      <div class="tri" lang="si"><span class="si" lang="si">පළමුව විශ්වාසය. දෙවනුව ප්‍රාග්ධනය.</span><span class="ta" lang="ta">முதலில் நம்பிக்கை. பின்னர் மூலதனம்.</span></div>
+      <p class="lead">Agri Lanka Trust reads an agri-SME's real documents, scores the business on five dimensions, and shows investors only the businesses that pass. Farmers prove it once. Investors stop spending weeks checking it.</p>
+      <div class="cta">
+        <a class="btn btn-gold" href="#join">I run an agri-SME</a>
+        <a class="btn btn-ghost" href="#investors">I invest or lend</a>
+        <a class="btn btn-ghost" href="demo/index.html">Open the live demo</a>
+      </div>
+    </div>
+    <aside class="cert" aria-label="Sample readiness certificate">
+      <div class="cert-top">
+        <div><small class="num">READINESS FILE · ALT-KUR-0082</small><b>Kurunegala Coconut Products</b><small>Desiccated coconut · Kurunegala · 14 staff</small></div>
+        <div class="ring" style="--v:82"><span>82<small>/ 100</small></span></div>
+      </div>
+      <ul class="docs">
+        <li>Business registration <span class="chip ok">Verified</span></li>
+        <li>Tax records (TIN) <span class="chip ok">Verified</span></li>
+        <li>12 months of sales <span class="chip ok">Verified</span></li>
+        <li>SL-GAP certificate <span class="chip wait">In review</span></li>
+        <li>Bank statements <span class="chip bad">Needs fix</span></li>
+      </ul>
+      <p class="gate">Threshold gates passed · visible to investors · every score links to its document</p>
+    </aside>
+  </div>
+</section>
+
+<div class="proof">
+  <div class="wrap">
+    <div class="cell"><b>23.4%</b><p>of Sri Lankan workers are in agriculture, yet it is only 8.4% of GDP.</p><cite>DCS Labour Force Survey Q3 2025; DCS national accounts 2025</cite></div>
+    <div class="cell"><b>&gt;20%</b><p>of GDP: the size of Sri Lanka's SME finance gap.</p><cite>MSME Finance Gap Database, via Daily FT 2026</cite></div>
+    <div class="cell"><b>20 hrs</b><p>median time an angel investor spends checking one deal.</p><cite>Wiltbank and Boeker, Kauffman Foundation</cite></div>
+    <div class="cell"><b>US$814M</b><p>of farm damage from Cyclone Ditwah: risk that investors now ask about.</p><cite>World Bank rapid damage estimate, Dec 2025</cite></div>
+  </div>
+</div>
+
+<section id="problem">
+  <div class="wrap split">
+    <div>
+      <p class="eyebrow">The trust gap</p>
+      <h2>Good farm businesses stay unfunded because nobody can check them cheaply.</h2>
+      <div class="pains">
+        <div class="pain"><i>01</i><div><b>SMEs cannot prove it.</b><p>Registration papers in a drawer, sales in a notebook, receipts as WhatsApp photos.</p></div></div>
+        <div class="pain"><i>02</i><div><b>Investors cannot verify it.</b><p>Each file means weeks of calls, visits and back-and-forth before any money moves.</p></div></div>
+        <div class="pain"><i>03</i><div><b>So capital stays idle.</b><p>Promising businesses stay invisible, or turn to moneylenders at 40% and more.</p></div></div>
+      </div>
+      <blockquote>"Sri Lanka's capital gap is structural, not monetary."<cite>UNDP Sri Lanka Resident Representative, Daily FT, 2026</cite></blockquote>
+    </div>
+    <figure class="photo" style="margin:0"><img src="img/farmer_harvest.jpg" alt="Farmer carrying a bundle of harvested paddy on his head" loading="lazy" style="aspect-ratio:4/5;object-position:50% 30%"><figcaption>Real sales. Scattered proof.</figcaption></figure>
+  </div>
+</section>
+
+<section class="flip">
+  <div class="wrap">
+    <div class="head"><p class="eyebrow">The flip</p><h2>Today SMEs pitch first and get checked later. We verify first.</h2></div>
+    <div class="lanes">
+      <div class="lane old"><span>Today</span><div>SME pitches directly</div><div>Investor digs through PDFs</div><div>Weeks of manual checks</div><div>Doubt. Deal lost.</div></div>
+      <div class="lane us"><span>With us</span><div>SME uploads proof from a phone</div><div>OCR and ML read and sort it</div><div>Five-dimension score + gates</div><div>Investor meets a verified SME</div></div>
+    </div>
+    <p class="tagline">Trust first. Capital second.</p>
+  </div>
+</section>
+
+<section id="how">
+  <div class="wrap">
+    <div class="head"><p class="eyebrow">How it works</p><h2>From a folder of papers to one score an investor can trust</h2><p class="lead">Seven steps, the first five automated. A person reviews anything the machine is unsure about.</p></div>
+    <div class="steps">
+      <div class="step"><h3>Upload the proof</h3><p>Registration, TIN, sales books, certificates, bank statements. Photos from a phone are fine. Help in Sinhala, Tamil and English on WhatsApp.</p></div>
+      <div class="step"><h3>OCR reads the text</h3><p>Optical character recognition turns each page into searchable text, including Sinhala and Tamil where the engine supports it.</p></div>
+      <div class="step"><h3>ML sorts each document</h3><p>A classifier recognises what each file is and how reliable it looks. Low-confidence files go to a human reviewer.</p></div>
+      <div class="step"><h3>Five-dimension assessment</h3><p>Operations, finance, compliance, market presence, and risk and sustainability, each scored from the evidence behind it.</p></div>
+      <div class="step"><h3>Score + threshold gates</h3><p>A readiness score out of 100. Critical areas have a minimum, so a high total cannot hide a red flag.</p></div>
+      <div class="step"><h3>Investor discovery, by consent</h3><p>Investors filter and compare verified SMEs. Documents stay locked until the SME says yes. Funding moves through a licensed partner bank.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="score" style="background:var(--card);border-block:1px solid var(--line)">
+  <div class="wrap">
+    <div class="head"><p class="eyebrow">Try the threshold gate</p><h2>Move the sliders. Watch who gets seen.</h2><p class="lead">This is the rule that makes the score trustworthy. A business with a strong total but weak compliance stays hidden until it fixes the gap.</p></div>
+    <div class="lab">
+      <div class="dims" id="dims">
+        <div class="dim"><div class="dim-top"><b>Operational existence and capacity</b><output id="o0">88</output></div><small>Is it real and able to produce? Site photos, utility bills, equipment, staff records.</small><input type="range" id="d0" min="0" max="100" value="88" aria-label="Operational existence score"></div>
+        <div class="dim crit"><div class="dim-top"><b>Financial readiness</b><output id="o1">80</output></div><small>Do the numbers agree? Sales books, bank statements, invoices.</small><input type="range" id="d1" min="0" max="100" value="80" aria-label="Financial readiness score"></div>
+        <div class="dim crit"><div class="dim-top"><b>Documentation and compliance</b><output id="o2">78</output></div><small>Registered, taxed and certified? BR, TIN, SL-GAP, licences.</small><input type="range" id="d2" min="0" max="100" value="78" aria-label="Documentation and compliance score"></div>
+        <div class="dim"><div class="dim-top"><b>Market presence and transparency</b><output id="o3">84</output></div><small>Real buyers? Contracts, purchase orders, online presence.</small><input type="range" id="d3" min="0" max="100" value="84" aria-label="Market presence score"></div>
+        <div class="dim"><div class="dim-top"><b>Risk and sustainability</b><output id="o4">80</output></div><small>Can it survive a shock? Insurance, irrigation, buyer spread, flood history.</small><input type="range" id="d4" min="0" max="100" value="80" aria-label="Risk and sustainability score"></div>
+      </div>
+      <div class="verdict" aria-live="polite">
+        <div class="v-row"><div class="ring" id="vring" style="--v:82"><span id="vtotal">82<small>/ 100</small></span></div><div><p class="eyebrow" style="color:var(--mute)">Readiness score</p><p class="status ok" id="vstatus">Visible to investors</p></div></div>
+        <ul class="rules" id="rules"></ul>
+        <button class="btn reset" type="button" id="reset">Reset to the sample SME</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="smes">
+  <div class="wrap">
+    <div class="head"><p class="eyebrow">Who we serve first</p><h2>Six agri sectors in the Western, North Western and Central provinces</h2><p class="lead">Year 1 target: 100 SMEs onboarded with two field officers. The North Central, Uva and Southern provinces follow in Year 2.</p></div>
+    <div class="sectors">
+      <div class="sector"><img src="img/king_coconut_vendor.jpg" alt="Vendor sitting beside a bicycle loaded with king coconuts" loading="lazy"><div><b>Coconut products</b><small>Exports up 42.7% in 2025 to US$1.23 bn</small></div></div>
+      <div class="sector"><img src="img/cinnamon_peeler.jpg" alt="Woman peeling cinnamon bark by hand" loading="lazy"><div><b>Spices</b><small>Cinnamon, pepper and cloves from Matale and the south</small></div></div>
+      <div class="sector"><img src="img/vegetable_vendor.jpg" alt="Vegetable shop in Kandy market" loading="lazy"><div><b>Fruit and vegetables</b><small>SL-GAP now compulsory for EU exports</small></div></div>
+      <div class="sector"><img src="img/dairy_farmer.jpg" alt="Smiling dairy farmer in a cattle shed" loading="lazy"><div><b>Dairy</b><small>Small herds, steady milk income</small></div></div>
+      <div class="sector"><img src="img/poultry_eggs.jpg" alt="Woman collecting eggs in a poultry house" loading="lazy"><div><b>Poultry</b><small>Eggs and broilers for local markets</small></div></div>
+      <div class="sector"><img src="img/women_paddy.jpg" alt="Farmers working in a green paddy field" loading="lazy"><div><b>Rice and food processing</b><small>Paddy, mills, dryers and packing units</small></div></div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap split">
+    <figure class="photo" style="margin:0"><img src="img/woman_vegetable_farm.jpg" alt="Woman and child working in a vegetable field" loading="lazy"><figcaption>Prove it once. Show it to every investor.</figcaption></figure>
+    <div>
+      <p class="eyebrow">For agri-SME owners</p>
+      <h2>A clear score, and a clear list of what to fix</h2>
+      <ul class="ticks">
+        <li><span><b>One upload, many investors.</b> Your verified profile replaces the folder you carry to every bank.</span></li>
+        <li><span><b>Know exactly what is missing.</b> "Needs fix" tells you which document to add and why it matters.</span></li>
+        <li><span><b>Help in your language.</b> Sinhala, Tamil and English support by phone and WhatsApp, plus field officer visits.</span></li>
+        <li><span><b>Built for seasonal income.</b> Pause your plan for up to two months instead of cancelling.</span></li>
+        <li><span><b>Your documents stay yours.</b> Investors see your score; they see files only when you approve.</span></li>
+      </ul>
+      <div class="checklist"><b>What to have ready</b>
+        <ul><li>Business registration (BR)</li><li>Tax file number (TIN)</li><li>12 months of sales records</li><li>6 months of bank statements</li><li>Certificates (SL-GAP, SLS, licences)</li><li>Buyer contracts or orders</li><li>Land deed or lease</li><li>Insurance details</li></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="investors" class="investors">
+  <div class="wrap split">
+    <div>
+      <p class="eyebrow">For investors and lenders</p>
+      <h2>A pipeline of agri-SMEs that have already been checked</h2>
+      <ul class="ticks">
+        <li><span><b>Minutes, not weeks.</b> Filter by sector, district and minimum score; compare SMEs side by side.</span></li>
+        <li><span><b>Explainable, not a black box.</b> Every dimension score links to the evidence behind it.</span></li>
+        <li><span><b>Gated quality.</b> You only see SMEs that pass the minimums on finance and compliance.</span></li>
+        <li><span><b>A monthly list</b> of newly validated SMEs that match your preferences.</span></li>
+        <li><span><b>Clean money flows.</b> Funding moves through a licensed partner bank. We never lend or hold your money.</span></li>
+      </ul>
+      <p class="lead" style="margin-top:18px">For angel, impact and diaspora investors, cooperative rural banks, microfinance and licensed lenders using NCGI guarantees.</p>
+    </div>
+    <figure class="photo" style="margin:0"><img src="img/colombo_night.jpg" alt="Colombo skyline at night reflected in water" loading="lazy"><figcaption>From Colombo to Kurunegala in one screen</figcaption></figure>
+  </div>
+</section>
+
+<section id="pricing">
+  <div class="wrap">
+    <div class="head"><p class="eyebrow">Pricing</p><h2>Simple monthly plans on both sides</h2><p class="lead">Prices in Sri Lankan rupees. The first month is free for investors; SMEs earn a free month for each paying SME they refer.</p></div>
+    <div class="plans">
+      <div class="plan"><p class="who">Agri-SME</p><h3>SME Access</h3><p class="price">2,500 <small>LKR / month</small></p><ul><li>Verified profile and score</li><li>Document checklist and fixes</li><li>WhatsApp support</li></ul></div>
+      <div class="plan hot"><p class="who">Agri-SME</p><h3>Premium SME</h3><p class="price">6,000 <small>LKR / month</small></p><ul><li>Everything in Access</li><li>Field officer visit</li><li>Priority listing and readiness report</li></ul></div>
+      <div class="plan"><p class="who">Investor</p><h3>Investor Access</h3><p class="price">5,000 <small>LKR / month</small></p><ul><li>Discover and filter verified SMEs</li><li>Compare and shortlist</li><li>Monthly new-SME list</li></ul></div>
+      <div class="plan hot"><p class="who">Investor</p><h3>Premium Investor</h3><p class="price">8,500 <small>LKR / month</small></p><ul><li>Everything in Access</li><li>Analytics and evidence packs</li><li>Early access to new SMEs</li></ul></div>
+    </div>
+    <div class="fee" aria-label="How the success fee works">
+      <div><small>SME pays</small><b>15%</b><small>a year on funding arranged</small></div>
+      <div><small>Investor earns</small><b>12%</b><small>a year</small></div>
+      <div><small>Agri Lanka Trust keeps</small><b>3%</b><small>success fee</small></div>
+      <div class="note">Deals from LKR 100,000 to 10 million. Money moves through a licensed partner bank's account, never ours, as the Microfinance and Credit Regulatory Authority Act No. 9 of 2026 requires.</div>
+    </div>
+  </div>
+</section>
+
+<section style="background:var(--card);border-block:1px solid var(--line)">
+  <div class="wrap">
+    <div class="head"><p class="eyebrow">Why now</p><h2>Lenders are moving to evidence. We produce it.</h2></div>
+    <div class="why">
+      <div><b>Rs 14 bn+</b><p>of collateral-free SME loans backed by NCGI guarantees since 2025. Cash-flow lending needs verified evidence.</p><cite>NCGI via Daily FT, Jul 2026</cite></div>
+      <div><b>May 2026</b><p>SL-GAP certification became compulsory for fresh fruit and vegetable exports to the EU.</p><cite>Daily FT, 28 May 2026</cite></div>
+      <div><b>1 Jan 2027</b><p>Key parts of the Personal Data Protection Act take effect. We are built privacy-first.</p><cite>Gazette 2498/16, 22 Jul 2026</cite></div>
+      <div><b>US$166M</b><p>from IFC in January 2026 for SME lending, including agri-SMEs, through three Sri Lankan banks.</p><cite>IFC press release, Jan 2026</cite></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="head"><p class="eyebrow">Roadmap</p><h2>From pilot to island-wide</h2></div>
+    <div class="road">
+      <div><b>Months 1-3</b><p>Register the company, finish the investor interface, publish the data-protection policy.</p></div>
+      <div><b>Months 4-8</b><p>Pilot with agricultural cooperatives; onboard the first SMEs with field officers.</p></div>
+      <div><b>Month 12</b><p>100 SMEs onboarded across three provinces.</p></div>
+      <div><b>Month 18</b><p>Three investor networks or financial institutions signed.</p></div>
+      <div><b>Year 3</b><p>New SME sectors; North and East; per-report fees for banks.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="team" style="padding-top:0">
+  <div class="wrap">
+    <div class="head"><p class="eyebrow">The founders</p><h2>Four founders, four clear roles, equal shares</h2></div>
+    <div class="team">
+      <div class="member"><div class="avatar">MB</div><p class="role">CEO · Group leader</p><h3>R.J.M.P.M. Bandara</h3><p>Strategy, investor relations, partnerships and governance.</p></div>
+      <div class="member"><div class="avatar">DS</div><p class="role">CTO</p><h3>D.I. Sayuranga</h3><p>Platform, OCR and machine learning, database and security.</p></div>
+      <div class="member"><div class="avatar">LN</div><p class="role">COO</p><h3>L.N.A.T.A. Nissanka</h3><p>Validation rules, compliance, operations and finance.</p></div>
+      <div class="member"><div class="avatar">MK</div><p class="role">CMO</p><h3>M.N. Kannangara</h3><p>Market research, SME acquisition and investor networks.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="faq" style="padding-top:0">
+  <div class="wrap">
+    <div class="head"><p class="eyebrow">Questions</p><h2>What people ask us</h2></div>
+    <div class="faq">
+      <details><summary>Is Agri Lanka Trust a lender?</summary><p>No. We verify businesses and connect them with investors. Any funding moves through a licensed partner bank. We earn subscriptions and a 3% success fee on funding arranged through the platform.</p></details>
+      <details><summary>Is the readiness score a credit rating?</summary><p>No. It is a readiness score built from the documents a business provides, with every point linked to its evidence. It is not a guarantee and not a credit rating; investors still make their own decisions.</p></details>
+      <details><summary>What if a document is fake?</summary><p>We cross-check documents against each other, check issuers where possible, send low-confidence files to a human reviewer and, for larger deals, visit the site. Suspicious files are flagged and the account can be restricted.</p></details>
+      <details><summary>Who can see my documents?</summary><p>Only our verification team. Investors see your score and summary; they see files only after you approve their request. Data is encrypted and handled under the Personal Data Protection Act No. 9 of 2022.</p></details>
+      <details><summary>My papers are in Sinhala or Tamil. Is that a problem?</summary><p>No. Upload them as they are. Where automatic reading is weaker for a script, a reviewer who reads the language checks it.</p></details>
+      <details><summary>What does it cost to start?</summary><p>SMEs start at LKR 2,500 a month and can pause for up to two months in the off-season. Investors start at LKR 5,000 a month, with the first month free.</p></details>
+    </div>
+  </div>
+</section>
+
+<section id="join" class="join">
+  <div class="wrap split">
+    <div>
+      <p class="eyebrow">Join the pilot</p>
+      <h2 style="color:#fff">Tell us who you are. A field officer or our investor desk will call you.</h2>
+      <p class="lead" style="margin-top:14px">Pilot districts: Kurunegala, Matale, Anuradhapura, Badulla, Hambantota and Colombo.</p>
+      <div class="contact">
+        <div><span>Phone and WhatsApp</span><b>+94 76 219 4432</b></div>
+        <div><span>Email</span><b>info@agrilankatrust.lk</b></div>
+        <div><span>Office</span><b>No. 45, Greenfield Mawatha, Colombo 05</b></div>
+      </div>
+    </div>
+    <form id="joinForm" novalidate>
+      <div class="seg" role="radiogroup" aria-label="I am">
+        <label><input type="radio" name="who" id="whoSme" value="sme" checked> I run an agri-SME</label>
+        <label><input type="radio" name="who" id="whoInv" value="investor"> I invest or lend</label>
+      </div>
+      <div class="row">
+        <label for="fname">Full name<input id="fname" name="fname" autocomplete="name" placeholder="e.g. Nimal Perera" required></label>
+        <label for="fphone">Phone<input id="fphone" name="fphone" type="tel" autocomplete="tel" placeholder="07X XXX XXXX" required></label>
+      </div>
+      <div class="row">
+        <label for="fdistrict">District<select id="fdistrict" name="fdistrict"><option>Kurunegala</option><option>Matale</option><option>Anuradhapura</option><option>Badulla</option><option>Hambantota</option><option>Colombo</option><option>Other</option></select></label>
+        <label for="fsector">Sector<select id="fsector" name="fsector"><option>Coconut products</option><option>Spices</option><option>Fruit and vegetables</option><option>Dairy</option><option>Poultry</option><option>Food processing</option></select></label>
+      </div>
+      <label for="flang">Preferred language<select id="flang" name="flang"><option>සිංහල (Sinhala)</option><option>தமிழ் (Tamil)</option><option>English</option></select></label>
+      <button class="btn btn-gold" type="submit">Request a call back</button>
+      <p class="thanks" id="thanks" hidden></p>
+    </form>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p><b>Agri Lanka Trust (Pvt) Ltd</b> · Validation-first agri-investment platform · Group 137, IT4050 Innovation Management and Entrepreneurship, SLIIT. A student business-pitch project: figures come from the group's business plan and public sources named on the page; the live demo uses sample data.</p>
+    <p>The readiness score is not a credit rating or a guarantee of any document or investment outcome. Agri Lanka Trust does not lend money or hold customer funds.</p>
+    <details><summary>Photo and icon credits</summary><ol id="credits"><li>poultry eggs: “Literacy Ambassador, Aisyah and Her” by U.S. Agency for International Development, cc0 1.0 (www.rawpixel.com/image/4076748/photo-image-public-domain-person-busine)</li><li>cinnamon sticks: “Cinnamomum verum spices” by Simon A. Eugster, CC BY-SA 3.0 (commons.wikimedia.org/wiki/File:Cinnamomum_verum_spices.jpg)</li><li>colombo night: “Night Skyline Reflection in Colombo, Sri Lanka” by Thilina Alagiyawanna, CC BY 4.0 (commons.wikimedia.org/wiki/File:Night_Skyline_Reflection_in_Colombo,_S)</li><li>handshake table: “Work Business” by Kristin Hardwick, cc0 1.0 (stocksnap.io/photo/work-business-J5LXKNDREC)</li><li>hero paddy: “Sri Lankan paddy fields” by Sasith Lakshan wickramasinghe, CC BY-SA 4.0 (commons.wikimedia.org/wiki/File:Sri_Lankan_paddy_fields.jpg)</li><li>farmer paddy palms: “Greenish Paddy” by Sivanandhan Dishanthan, CC BY-SA 4.0 (commons.wikimedia.org/wiki/File:Greenish_Paddy.jpg)</li><li>paddy sunset: “Sri lanka,galgamuwa , maharachchimulla” by Usersapi24, CC BY-SA 4.0 (commons.wikimedia.org/wiki/File:Sri_lanka,galgamuwa_,_maharachchimulla)</li><li>paddy tree: “Paddy field in Sammanthurai, Ampara, Sri Lanka” by Anton Croos, CC BY-SA 3.0 (commons.wikimedia.org/wiki/File:Paddy_field_in_Sammanthurai,_Ampara,_S)</li><li>terraces aerial: “Homeward Bound” by BanduG, CC BY-SA 4.0 (commons.wikimedia.org/wiki/File:Homeward_Bound.jpg)</li><li>farmer harvest: “Farmer in village” by Athettan, CC BY-SA 4.0 (commons.wikimedia.org/wiki/File:Farmer_in_village.jpg)</li><li>woman vegetable farm: “Saaraketha Farmer-1” by CNisansala, CC BY-SA 4.0 (commons.wikimedia.org/wiki/File:Saaraketha_Farmer-1.jpg)</li><li>women paddy: “Farmers in a Paddy field” by Cwij66, CC BY-SA 4.0 (commons.wikimedia.org/wiki/File:Farmers_in_a_Paddy_field.jpg)</li><li>tea pluckers: “Sri Lanka, Tea plantations near Nuwara Eliya, Tea estate” by Vyacheslav Argenberg, CC BY 4.0 (commons.wikimedia.org/wiki/File:Sri_Lanka,_Tea_plantations_near_Nuwara)</li><li>tea plucker: “Sri Lanka, tea plantation” by High Contrast, CC BY-SA 3.0 de (commons.wikimedia.org/wiki/File:Sri_Lanka,_tea_plantation.JPG)</li><li>cinnamon peeler: “Traditional preparation of cinnamon bark in Balapitiya, Sri Lanka, 20260207 0852 9188” by Jakub Hałun, CC BY 4.0 (commons.wikimedia.org/wiki/File:Traditional_preparation_of_cinnamon_ba)</li><li>dairy farmer: “Conor Ashleigh ©2011 DAY4 highres-4 (10688674996)” by Department of Foreign Affairs and Trade, CC BY 2.0 (commons.wikimedia.org/wiki/File:Conor_Ashleigh_%C2%A92011_DAY4_highres)</li><li>king coconut vendor: “King of Coconut” by Yumeshan Lakshitha, CC BY-SA 4.0 (commons.wikimedia.org/wiki/File:King_of_Coconut.jpg)</li><li>vegetable vendor: “Sri Lanka - 078 - Colourful veggie shop in Kandy (1685043708)” by McKay Savage from London, UK, CC BY 2.0 (commons.wikimedia.org/wiki/File:Sri_Lanka_-_078_-_Colourful_veggie_sho)</li><li>coconut climber: “Coconut tree climber in the 21st Century” by Roseli1990, CC0 (commons.wikimedia.org/wiki/File:Coconut_tree_climber_in_the_21st_Centu)</li><li>Icons (tick and cross): Phosphor Icons, MIT licence (phosphoricons.com)</li></ol></details>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var ids=[0,1,2,3,4], base=[88,80,78,84,80];
+  var names=["Operational existence","Financial readiness","Documentation and compliance","Market presence","Risk and sustainability"];
+  function $(i){return document.getElementById(i)}
+  function render(){
+    var v=ids.map(function(i){return +$("d"+i).value});
+    ids.forEach(function(i){$("o"+i).textContent=v[i]});
+    var total=Math.round(v.reduce(function(a,b){return a+b},0)/5);
+    var rules=[
+      {ok:total>=65,t:"Total score at least 65 (now "+total+")"},
+      {ok:v[2]>=60,t:"Documentation and compliance at least 60 (critical)"},
+      {ok:v[1]>=55,t:"Financial readiness at least 55 (critical)"},
+      {ok:v.every(function(x){return x>=40}),t:"No dimension below 40"}
+    ];
+    var pass=rules.every(function(r){return r.ok});
+    $("vring").style.setProperty("--v",total);
+    $("vtotal").innerHTML=total+"<small>/ 100</small>";
+    var st=$("vstatus"); st.textContent=pass?"Visible to investors":"Hidden until fixed"; st.className="status "+(pass?"ok":"no");
+    $("rules").innerHTML=rules.map(function(r){return '<li class="'+(r.ok?"":"fail")+'">'+r.t+"</li>"}).join("");
+  }
+  ids.forEach(function(i){$("d"+i).addEventListener("input",render)});
+  $("reset").addEventListener("click",function(){ids.forEach(function(i){$("d"+i).value=base[i]});render()});
+  render();
+  $("joinForm").addEventListener("submit",function(e){
+    e.preventDefault();
+    var n=$("fname").value.trim(), p=$("fphone").value.trim(), t=$("thanks");
+    if(!n||!p){t.hidden=false;t.textContent="Please add your name and phone number so we can call you.";return}
+    var inv=$("whoInv").checked;
+    t.hidden=false;
+    t.textContent="Thank you, "+n.split(" ")[0]+". This is a demo form, so nothing was sent. In the live service, "+(inv?"our investor desk":"a field officer for "+$("fdistrict").value)+" would call "+p+" within two working days.";
+  });
+})();
+</script>
+</body>
+</html>
